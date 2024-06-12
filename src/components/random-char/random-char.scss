@@ -1,0 +1,63 @@
+@import '../../style/variables.scss';
+
+.randomchar {
+    margin-top: 50px;
+    &_wrapper {
+        display: grid;
+        grid-template-columns: repeat(2, 550px);
+        align-items: center;
+        box-shadow: 5px 5px 20px $black-color;
+    }
+    &_white {
+        padding: 35px;
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 30px;
+        &_img {
+            width: 180px;
+            height: 180px;
+        }
+        &_title {
+            color: $black-color;
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 26px;
+        }
+        &_descr {
+            color: $black-color;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 16px;
+            margin-top: 15px;
+        }
+        &_btns {
+            display: flex;
+            justify-content: start;
+            gap: 30px;
+            margin-top: 20px;
+        }
+    }
+    &_black {
+        padding: 35px;
+        background-color: $black-color;
+        position: relative;
+        &_title {
+            color: $white-color;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 28px;
+            margin-bottom: 35px;
+            &:nth-child(2) {
+                margin-bottom: 0;
+            }
+        }
+        &_btn {
+            margin-top: 22px;
+        }
+        &_img {
+            position: absolute; 
+            bottom: 15px;
+            right: -30px;
+        }
+    }
+}

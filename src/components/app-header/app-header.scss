@@ -1,0 +1,32 @@
+@import '../../style/variables.scss';
+
+.header {
+    &_wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &_title {
+        color: $black-color;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 33px;
+        span {
+            color: $red-color;
+        }
+    }
+    &_menu {
+        display: flex;
+        justify-content: end;
+        gap: 8px;
+    }
+    &_link {
+        color: $black-color;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 28px;
+        &_red {
+            color: $red-color;
+        }
+    }
+}

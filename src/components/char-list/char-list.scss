@@ -1,0 +1,38 @@
+@import '../../style/variables.scss';
+
+.charlist {
+    margin-top: 50px;
+    width: 650px;
+    &_wrapper {
+        display: flex;
+        justify-content: start;
+        gap: 25px;
+        flex-wrap: wrap;
+        width: 650px;
+    }
+    &_item {
+        width: 200px;
+        height: 318px;
+        background-color: $black-color;
+        box-shadow: 3px 3px 7px $grey-color;
+        // &:hover {
+        //     box-shadow: 3px 3px 7px $red-color;
+        // }
+        &_selected {
+            box-shadow: 0 5px 20px $red-color;
+            transform: translateY(-8px);
+        }
+    }
+    &_img {
+        width: 200px;
+        height: 200px;
+    }
+    &_title {
+        color: $white-color;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 26px;
+        padding: 15px;
+    }
+
+}
