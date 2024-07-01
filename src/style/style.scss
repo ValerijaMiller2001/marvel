@@ -49,13 +49,15 @@ input::-webkit-inner-spin-button {
 
 main {
     position: relative;
+    margin-top: 50px;
 }
 
 .app {
     width: 1100px;
     margin: 0 auto;
-    padding: 50px 0 50px 0;
     position: relative;
+    margin-bottom: 50px;
+    margin-top: 50px;
 }
 
 .wrapper {
@@ -63,6 +65,7 @@ main {
     justify-content: start;
     gap: 25px;
 }
+
 
 .pulse {
     animation: pulse 1.5s ease-in-out .5s infinite

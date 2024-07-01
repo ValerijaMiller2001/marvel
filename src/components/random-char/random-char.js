@@ -1,87 +1,59 @@
-import {Component} from 'react'
+import {useState, useEffect} from 'react'
 import Spinner from '../spinner/spinner';
-import MarvelService from '../../services/marvel-service';
+import useMarvelService from '../../services/marvel-service';
 import ErrorMessage from '../error-message/error-message';
 
 import './random-char.scss';
 import decoration from '../../resources/img/decoration.png';
 
-class RandomChar extends Component {
-    state = {
-        char: {},
-        loading: true,
-        error: false
+const RandomChar = () => {
+    const [char, setChar] = useState({});
+
+    const {loading, error, getCharacter, clearError} = useMarvelService();
+
+    useEffect(() => {
+        updateChar();
+        // const timerId = setInterval(updateChar, 10000);
+        // return () => {
+        //     clearInterval(timerId)
+        // } 
+    }, [])
+
+    const onCharLoaded = (char) => {
+        setChar(char);
     }
 
-    marvelService = new MarvelService();
-
-    componentDidMount() {
-        this.updateChar();
-        // this.timerId = setInterval(this.updateChar, 10000);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timerId);
-    }
-
-    onCharLoaded = (char) => {
-        this.setState({
-            char, 
-            loading: false
-        })
-    }
-
-    onCharLoading = () => {
-        this.setState({
-            loading: true
-        })
-    }
-
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        })
-    }
-
-    updateChar = () => {
+    const updateChar = () => {
+        clearError();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        this.onCharLoading();
-        this.marvelService
-            .getCharacter(id)
-            .then(this.onCharLoaded)
-            .catch(this.onError);
+        getCharacter(id)
+            .then(onCharLoaded)
     }
 
+    const errorMessage = error ? <ErrorMessage /> : null;
+    const spinner = loading ? <Spinner /> : null;
+    const content = !(loading || error) ? <View char={char} /> : null;
 
+    return (
+        <div className="randomchar">
+            <div className="randomchar_wrapper">
+                {errorMessage}
+                {spinner}
+                {content}
 
-    render() {
-        const {char, loading, error} = this.state;
-        const errorMessage = error ? <ErrorMessage /> : null;
-        const spinner = loading ? <Spinner /> : null;
-        const content = !(loading || error) ? <View char={char} /> : null;
-
-        return (
-            <div className="randomchar">
-                <div className="randomchar_wrapper">
-                    {errorMessage}
-                    {spinner}
-                    {content}
-
-                    <div className="randomchar_black">
-                        <div className="randomchar_black_title">
-                            Random character for today!
-                            <br />
-                            Do you want to get to know him better?
-                        </div>
-                        <div className="randomchar_black_title">Or choose another one</div>
-                        <button className='btn btn_red randomchar_black_btn' onClick={this.updateChar}>TRY IT</button>
-                        <img src={decoration} alt="decoration" className='randomchar_black_img' />
+                <div className="randomchar_black">
+                    <div className="randomchar_black_title">
+                        Random character for today!
+                        <br />
+                        Do you want to get to know him better?
                     </div>
+                    <div className="randomchar_black_title">Or choose another one</div>
+                    <button className='btn btn_red randomchar_black_btn' onClick={updateChar}>TRY IT</button>
+                    <img src={decoration} alt="decoration" className='randomchar_black_img' />
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
 }
 
 const View = ({char}) => {

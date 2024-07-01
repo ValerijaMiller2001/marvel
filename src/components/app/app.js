@@ -1,43 +1,33 @@
-import { Component } from "react";
+import { lazy, Suspense } from 'react';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import AppHeader from "../app-header/app-header";
-import CharInfo from "../char-info/char-info";
-import CharList from "../char-list/char-list";
-import Asset from "../asset/asset";
-import RandomChar from "../random-char/random-char";
-import ErrorBoundary from "../error-boundary/error-boundary";
+import Spinner from '../spinner/spinner';
 
-class App extends Component {
-    state = {
-        selectedChar: null
-    }
+const Page404 = lazy(() => import('../pages/404'));
+const MainPage = lazy(() => import('../pages/main-page'));
+const ComicsPage = lazy(() => import('../pages/comics-page'));
+const SingleComicPage = lazy(() => import('../pages/single-comic-page'));
 
-    onCharSelected = (id) => {
-        this.setState({
-            selectedChar: id
-        })
-    }
-
-    render() {
-        return (
+//973
+const App = () => {
+    return (
+        <Router>
             <div className='app'>
                 <AppHeader />
                 <main>
-                    <ErrorBoundary>
-                        <RandomChar />
-                    </ErrorBoundary>
-                    <div className="wrapper">
-                        <ErrorBoundary>
-                            <CharList onCharSelected={this.onCharSelected} />
-                        </ErrorBoundary>
-                        <ErrorBoundary>
-                            <CharInfo charId={this.state.selectedChar} />
-                        </ErrorBoundary>
-                    </div>
-                    <Asset />
+                    <Suspense fallback={<Spinner/>}>
+                        <Routes>
+                            <Route path='/' element={<MainPage/>} />
+                            <Route path='/comics' element={<ComicsPage/>} />
+                            <Route path='/comics/:comicId' element={<SingleComicPage/>} />
+                            <Route path='*' element={<Page404/>} />
+                        </Routes>
+                    </Suspense>
+
                 </main>  
             </div>
-        )
-    }
+        </Router>
+    )
 }
 
 export default App;
