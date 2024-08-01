@@ -15,7 +15,6 @@ const AppHeader = () => {
                     <ul className='header_menu'>
                         <li>
                             <NavLink
-                                end 
                                 to='/' 
                                 className={({ isActive }) => isActive ? "header_link_red" : "header_link"}>
                                     Characters

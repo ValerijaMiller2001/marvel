@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {Helmet} from "react-helmet";
 import CharInfo from "../char-info/char-info";
 import CharList from "../char-list/char-list";
 import Asset from "../asset/asset";
@@ -17,6 +18,13 @@ const MainPage = () => {
 
     return (
         <>
+            <Helmet>
+                <meta
+                    name="description"
+                    content="Marvel information portal"
+                />
+                <title>Marvel information portal</title>
+            </Helmet>
             <ErrorBoundary>
                 <RandomChar />
             </ErrorBoundary>
@@ -29,9 +37,10 @@ const MainPage = () => {
                         <CharInfo charId={selectedChar} />
                         <CharSearch/>
                     </ErrorBoundary>
+                    <Asset />
                 </div>
             </div>
-            <Asset />
+
         </>
     )
 }

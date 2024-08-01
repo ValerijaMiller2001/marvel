@@ -66,6 +66,9 @@ main {
     gap: 25px;
 }
 
+.right {
+    position: relative;
+}
 
 .pulse {
     animation: pulse 1.5s ease-in-out .5s infinite

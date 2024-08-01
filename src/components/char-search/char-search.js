@@ -7,10 +7,9 @@ import ErrorMessage from '../error-message/error-message';
 
 import './char-search.scss';
 
-
 const CharSearch = () => {
     const [char, setChar] = useState(null);
-    const {loading, error, clearError, getCharacterByName} = useMarvelService();
+    const {clearError, getCharacterByName, process, setProcess} = useMarvelService();
 
     const onCharLoaded = (char) => {
         setChar(char);
@@ -19,14 +18,15 @@ const CharSearch = () => {
     const updateChar = (name) => {
         clearError();
         getCharacterByName(name)
-            .then(onCharLoaded);
+            .then(onCharLoaded)
+            .then(() => setProcess('confirmed'))
     }
 
-    const errorMessage = error ? <ErrorMessage /> : null;
+    const errorMessage = process === 'error' ? <ErrorMessage /> : null;
     const results = !char ? null : char.length > 0 ? 
                                                 <div className="search_wrapper">
                                                     <div className="search_title search_title_green">There is! Visit {char[0].name} page?</div>
-                                                    <Link to={`/characters/${char[0].id}`}>
+                                                    <Link to={`/${char[0].id}`}>
                                                         <button type='submit' className="btn btn_grey">TO PAGE</button>
                                                     </Link>
                                                 </div> :
@@ -58,7 +58,7 @@ const CharSearch = () => {
                                 <button 
                                     type='submit' 
                                     className="btn btn_red"
-                                    disabled={loading}>
+                                    disabled={process === 'loading'}>
                                         FIND
                                 </button>
                     </div>

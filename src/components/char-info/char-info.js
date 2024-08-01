@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import useMarvelService from '../../services/marvel-service';
-import ErrorMessage from '../error-message/error-message';
-import Spinner from '../spinner/spinner';
-import Skeleton from '../skeleton/skeleton';
+import setContent from '../../utils/set-content';
 import './char-info.scss';
 
 const CharInfo = (props) => {
     const [char, setChar] = useState(null);
 
-    const {loading, error, getCharacter, clearError} = useMarvelService();
+    const {getCharacter, clearError, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         updateChar();
+        // eslint-disable-next-line
     }, [props.charId])
 
     const onCharLoaded = (char) => {
@@ -27,27 +26,19 @@ const CharInfo = (props) => {
         clearError();
         getCharacter(charId)
             .then(onCharLoaded)
+            .then(() => setProcess('confirmed'))
     }
-
-
-    const skeleton = char || loading || error ? null : <Skeleton />;
-    const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading ? <Spinner /> : null;
-    const content = !(loading || error || !char) ? <View char={char} /> : null;
 
     return (
         <div className='charinfo'>
-            {skeleton}
-            {errorMessage}
-            {spinner}
-            {content}
+            {setContent(process, View, char)}
         </div>      
     )
    
 }
 
-const View = ({char}) => {
-    const {name, description, thumbnail, homepage, wiki, comics} = char;
+const View = ({data}) => {
+    const {name, description, thumbnail, homepage, wiki, comics} = data;
     let imgStyle = {'objectFit' : 'cover'};
     if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
         imgStyle = {'objectFit' : 'contain'};
@@ -69,6 +60,7 @@ const View = ({char}) => {
                     {comics.lenght > 0 ? null : 'There is no comics with this character'}
                     {
                         comics.map((item, i) => {
+                            // eslint-disable-next-line
                             if (i > 9) return;
                             return (
                                 <li key={i} className="charinfo_comics_item">{item.name}</li> 

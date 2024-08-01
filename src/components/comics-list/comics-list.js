@@ -5,6 +5,21 @@ import Spinner from '../spinner/spinner';
 import ErrorMessage from '../error-message/error-message';
 import './comics-list.scss';
 
+const setContent = (process, Component, newItemLoading ) => {
+    switch (process) {
+        case 'waiting':
+            return <Spinner/>;
+        case 'loading':
+            return newItemLoading ? <Component/> : <Spinner/>;
+        case 'confirmed':
+            return <Component/>;
+        case 'error':
+            return <ErrorMessage/>
+        default: 
+            throw new Error('Unexpected process state');
+    }
+}
+
 const ComicsList = (props) => {
     const [comicList, setComicList] = useState([]);
 
@@ -12,16 +27,18 @@ const ComicsList = (props) => {
     const [offset, setOffset] = useState(0);
     const [comicEnded, setComicEnded] = useState(false);
 
-    const {loading, error, getAllComics} = useMarvelService();
+    const {getAllComics, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         onRequest(offset, true);
+        // eslint-disable-next-line
     }, [])
 
     const onRequest = (offset, initial) => {
         initial ? setNewItemLoading(false) : setNewItemLoading(true);
         getAllComics(offset)
             .then(onComicListLoaded)
+            .then(() => setProcess('confirmed'))
     }
 
     const onComicListLoaded = (newComicList) => {
@@ -56,15 +73,10 @@ const ComicsList = (props) => {
         )
     }
 
-    const items = renderItems(comicList);
-    const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading && !newItemLoading ? <Spinner /> : null;
-
     return (
         <div className="comicslist">
-            {errorMessage}
-            {spinner}
-            {items}
+            {setContent(process, () => renderItems(comicList), newItemLoading)}
+
             <button 
                 className='btn btn_long' 
                 disabled={newItemLoading}
@@ -74,9 +86,6 @@ const ComicsList = (props) => {
             </button>
         </div>
     )
-
 }
-
-
 
 export default ComicsList;
